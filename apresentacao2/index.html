@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Apresentação Cloud</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            background: #0f172a; 
+            color: white; 
+            font-family: 'Inter', sans-serif; 
+            margin: 0; 
+            height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            overflow: hidden;
+        }
+
+        .header { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+        
+        .btn-back { 
+            text-decoration: none; color: #38bdf8; font-weight: bold; 
+            padding: 10px 20px; border: 1px solid #38bdf8; border-radius: 8px; transition: 0.3s;
+        }
+        .btn-back:hover { background: #38bdf8; color: #0f172a; }
+
+        .viewer { 
+            flex: 1; display: flex; align-items: center; justify-content: center; 
+            perspective: 1000px;
+        }
+
+        /* Efeito de Zoom e Opacidade no Slide */
+        #slideImg { 
+            max-height: 80vh; max-width: 90%; 
+            border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+
+        .slide-hidden { opacity: 0; transform: scale(0.95); }
+
+        .footer { 
+            background: #1e293b; padding: 25px; 
+            display: flex; justify-content: center; gap: 30px; align-items: center;
+        }
+
+        .nav-btn { 
+            background: #38bdf8; border: none; padding: 12px 30px; 
+            border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s;
+        }
+        .nav-btn:hover { transform: scale(1.05); filter: brightness(1.1); }
+        .nav-btn:disabled { background: #475569; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="../index.html" class="btn-back">← Sair</a>
+        <div id="counter">Slide 1 / 10</div>
+    </div>
+
+    <div class="viewer">
+        <img id="slideImg" src="img/slide_1.png" alt="Slide">
+    </div>
+
+    <div class="footer">
+        <button class="nav-btn" onclick="changeSlide(-1)">Anterior</button>
+        <button class="nav-btn" onclick="changeSlide(1)">Próximo</button>
+    </div>
+
+    <script>
+        let current = 1;
+        const total = 10; // AJUSTE AQUI A QUANTIDADE DE SLIDES
+        const img = document.getElementById('slideImg');
+        const counter = document.getElementById('counter');
+
+        function changeSlide(dir) {
+            let next = current + dir;
+            if (next < 1 || next > total) return;
+
+            // Inicia animação de saída
+            img.classList.add('slide-hidden');
+
+            setTimeout(() => {
+                current = next;
+                img.src = `img/slide_${current}.png`;
+                counter.innerText = `Slide ${current} / ${total}`;
+                // Inicia animação de entrada
+                img.classList.remove('slide-hidden');
+            }, 400);
+        }
+
+        // Navegação por teclado (Setas)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "ArrowRight") changeSlide(1);
+            if (e.key === "ArrowLeft") changeSlide(-1);
+        });
+    </script>
+</body>
+</html>
